@@ -1,14 +1,12 @@
 import { type Locator, type Page } from '@playwright/test';
-import { BasePage } from '../../infra/base-page';
-import { waitForElementToBeVisible } from '../../utils/wait-for-elements';
-
+import { BasePage } from '../infra/base-page';
 export class MainPage extends BasePage {
     // LOCATORS
     private readonly cartCount: Locator;
     private readonly cartTotalPrice: Locator;
     private readonly userAcountButton:Locator;
     private readonly addressManagementButton:Locator;
-    readonly userName:Locator;
+    private readonly userName:Locator;
 
     constructor(page: Page) {
         super(page);
@@ -19,7 +17,7 @@ export class MainPage extends BasePage {
         this.userName=this.page.locator('//*[@id="login-user"]/div/div/div[2]/div/span')
         this.initPage();
     }
-    
+
     async clickOnUserProfileButton(){
         await this.userAcountButton.click()
     }
@@ -27,21 +25,16 @@ export class MainPage extends BasePage {
         await  this.addressManagementButton.click()
     }
     async getCartProductCount() {
-        const state = await waitForElementToBeVisible(this.cartCount.first(),1000,5)
         return await this.cartCount.count();
     }
     async getTotalPrice() {
-        const state = await waitForElementToBeVisible(this.cartCount.first(),1000,5)
         const sumShekels = await this.cartTotalPrice.textContent();
         if (sumShekels) {
             const cleanedString = sumShekels.replace(" ₪", "");
             return parseFloat(cleanedString);
         }
     }
-    async checkUserNameMatches(user:string){
-        const wait =await waitForElementToBeVisible(this.userName,1000,5)
-        const name = await this.userName.textContent();
-        if (name && wait) return name.includes(user)
-        return false
+    async getUserName(){
+        return await this.userName.textContent();
     }
 }
