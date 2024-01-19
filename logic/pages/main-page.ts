@@ -1,5 +1,5 @@
 import { type Locator, type Page } from '@playwright/test';
-import { BasePage } from '../infra/base-page';
+import { BasePage } from '../../infra/base-page';
 export class MainPage extends BasePage {
     // LOCATORS
     private readonly cartCount: Locator;
